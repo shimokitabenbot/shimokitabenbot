@@ -6,5 +6,9 @@ README
 ## ファイル説明
 ### FunctionSpecification.md
 - 機能仕様書。
+
 ### DetailedSpecification.md
 - 詳細仕様書。
+
+### model.asta
+- モデル図。
