@@ -20,14 +20,14 @@ class WordController < ActionController::Base
       # Wordsテーブルに登録する
       id = 0
       Word.new do |w|
-        id = Word.maximum('id') + 1
         w.word = json['word']
         w.description = json['description']
         w.example = json['example']
         w.translate = json['translate']
         w.save!
+        id = w.id
       end
-      render :status => 200, :json => res_body(id, json['word'])
+      render :status => 200, :json => { "id" => id, "word" => word}.to_json
     rescue InvalidContentType => e
       render :status => e.status, :json => e.json
     rescue NotJSON => e
@@ -39,11 +39,6 @@ class WordController < ActionController::Base
   end
 
   private
-    # レスポンスボディを作成する
-    def res_body(id, word)
-      res_b = { "id" => id, "word" => word}
-      return res_b.to_json
-    end
     # リクエストボディをチェックし、正常であればJSONにパースしたものを返す。
     # 正常でなければ、エラーを返す
     # チェックする項目は以下の通り。
