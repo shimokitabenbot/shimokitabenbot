@@ -7,11 +7,13 @@ class WordController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  include HTTPRequestValidator
+
   # 単語登録を行う
   def create
   	begin
   	  # リクエストヘッダをチェックする
-  	  validate_req_header(request.headers)
+  	  validate_header(request.headers)
   	  # リクエストボディを取得する
       body = request.body
       # リクエストボディをチェックする
@@ -39,21 +41,5 @@ class WordController < ActionController::Base
   end
 
   private
-    # リクエストボディをチェックし、正常であればJSONにパースしたものを返す。
-    # 正常でなければ、エラーを返す
-    # チェックする項目は以下の通り。
-    # * リクエストボディのnilチェック
-    # * リクエストボディのJSONチェック
-    def validate_body_and_parse_json(body)
-      # nilまたは空の場合は終了。
-      raise EmptyBody if body.nil? or body.empty?
-      json = nil
-      begin
-        json = JSON.parse(body)
-      rescue JSONError => e
-        raise NotJSON
-      end
-      return json
-    end
 
 end
