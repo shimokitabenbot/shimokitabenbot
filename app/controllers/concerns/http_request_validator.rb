@@ -3,8 +3,7 @@
 HTTPリクエストデータの検証を行うモジュール
 =end
 module HTTPRequestValidator
-
-  include Constants
+  extend ActiveSupport::Concern
 
   # リクエストヘッダを検証し、正常でなければ、エラーを返す。
   # 検証項目は以下の通り。
@@ -22,12 +21,12 @@ module HTTPRequestValidator
   # * リクエストボディのJSONチェック
   def validate_body_and_parse_json(body)
     # nilまたは空の場合は終了。
-    raise EmptyBody if body.nil? or body.empty?
+    raise EmptyBodyError if body.nil? or body.empty?
     json = nil
     begin
       json = JSON.parse(body)
     rescue JSONError => e
-      raise NotJSON
+      raise NotJSONError(body)
     end
     return json
   end

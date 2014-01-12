@@ -21,7 +21,7 @@ class Word < ActiveRecord::Base
   # 文字列の長さをチェックする
   validates_length_of :word, maximum: 16, too_long: MSG_TOO_LONG_WORD
   validates_length_of :description, maximum: 32, too_long: MSG_TOO_LONG_DESC
-  validates_length_of :example, maximum: 64, too_long: MSG_TOO_LONG_EXAM
-  validates_length_of :translate, maximum: 64, too_long: MSG_TOO_LONG_TRNS
-  
+  validates_length_of :example, maximum: 64, too_long: MSG_TOO_LONG_EXAM :unless => (example.nil? or translate.nil?)
+  validates_length_of :translate, maximum: 64, too_long: MSG_TOO_LONG_TRNS :unless => (example.nil? or translate.nil?)
+
 end

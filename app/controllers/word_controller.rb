@@ -2,25 +2,23 @@
 =begin rdoc
 単語登録、更新、削除処理を行うコントローラ
 =end
-class WordController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
-  include HTTPRequestValidator
+class WordController < ApplicationController
 
   # 単語登録を行う
   def create
+    logger.info('Start word regist.')
   	begin
   	  # リクエストヘッダをチェックする
-  	  validate_header(request.headers)
+#  	  validate_header(request.headers)
   	  # リクエストボディを取得する
       body = request.body
       # リクエストボディをチェックする
       json = validate_body_and_parse_json(body)
+      logger.debug('request body verifying : OK') unless json.nil? or json.empty?
 
       # Wordsテーブルに登録する
       id = 0
+      logger.debug("record: #{json['word']}, description: #{json['description']}, example: #{json['example']}, translate: #{json['translate']}")
       Word.new do |w|
         w.word = json['word']
         w.description = json['description']
@@ -29,17 +27,19 @@ class WordController < ActionController::Base
         w.save!
         id = w.id
       end
+      logger.info('Insert record finished.')
       render :status => 200, :json => { "id" => id, "word" => word}.to_json
-    rescue InvalidContentType => e
+    rescue NotJSONError => e
       render :status => e.status, :json => e.json
-    rescue NotJSON => e
-      render :status => e.status, :json => e.json
-    rescue 
-
+    rescue => e
+      render :status => 500 :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
     end
-
+    logger.info('Succeeded word regist.')
   end
 
-  private
+  # 単語検索を行う
+  def search
+    
+  end
 
 end
