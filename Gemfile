@@ -32,11 +32,14 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# Using RSpec for Testing.
+# Use RSpec for Testing.
 group :test do
   gem "rspec"
   gem "rspec-rails"
 end
+
+# Use PostgreSQL
+gem 'pg', '>= 0.17.1'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'

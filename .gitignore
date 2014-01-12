@@ -19,3 +19,8 @@
 /*.bak
 /**/*.bak
 /**/**/*.bak
+
+# Ignore .swp files.
+/*.swp
+/**/*.swp
+/**/**/*.swp

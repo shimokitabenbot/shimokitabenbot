@@ -8,7 +8,7 @@ production:
   database: <%= ENV['DB_NAME'] %>
   pool: 5
   timeout: 5000
-  encoding: utf8
+  encoding: UTF-8
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASS'] %>
 
@@ -20,7 +20,7 @@ test:
   database: shimokitaben
   pool: 5
   timeout: 5000
-  encoding: utf8
+  encoding: UTF-8
   username: shimokita
   password: osorezan
 
@@ -29,6 +29,6 @@ development:
   database: shimokitaben
   pool: 5
   timeout: 5000
-  encoding: utf8
+  encoding: UTF-8
   username: shimokita
   password: osorezan
