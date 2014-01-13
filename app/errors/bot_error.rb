@@ -12,6 +12,7 @@ class BotError < Exception
 
   # エラー情報JSONオブジェクトを作成する。
   def json
+    error = {}
     error['code'] = @code
     error['message'] = @message
     error['detail'] = @detail
@@ -22,6 +23,7 @@ end
 # リクエストボディが空
 class EmptyBodyError < BotError
   def initialize
+    super
     @code = '11000001'
     @message = 'empty_body'
     @detail = nil
@@ -31,6 +33,7 @@ end
 # リクエストボディがJSONではないエラー
 class NotJSONError < BotError
   def initialize(json)
+    super
     @code = '11000001'
     @message = 'empty_body'
     @detail = json
@@ -40,6 +43,7 @@ end
 # JSONのキーに対応する値が空
 class EmptyValueError < BotError
   def initialize(key)
+    super
     @code = '11000003'
     @message = 'empty_value'
     @detail = key

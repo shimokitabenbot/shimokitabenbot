@@ -24,3 +24,6 @@
 /*.swp
 /**/*.swp
 /**/**/*.swp
+
+# Ignore log files.
+/log/*.log

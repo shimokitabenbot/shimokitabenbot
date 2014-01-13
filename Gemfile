@@ -41,6 +41,11 @@ end
 # Use PostgreSQL
 gem 'pg', '>= 0.17.1'
 
+# Use Capybara
+group :test, :development do
+  gem "capybara"
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

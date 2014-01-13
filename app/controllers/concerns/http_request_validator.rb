@@ -21,7 +21,7 @@ module HTTPRequestValidator
   # * リクエストボディのJSONチェック
   def validate_body_and_parse_json(body)
     # nilまたは空の場合は終了。
-    raise EmptyBodyError if body.nil? or body.empty?
+    raise EmptyBodyError if body.nil? or body.size == 0
     json = nil
     begin
       json = JSON.parse(body)
