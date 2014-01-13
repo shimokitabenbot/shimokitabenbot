@@ -33,7 +33,7 @@ group :doc do
 end
 
 # Use RSpec for Testing.
-group :test do
+group :test,:development do
   gem "rspec"
   gem "rspec-rails"
 end

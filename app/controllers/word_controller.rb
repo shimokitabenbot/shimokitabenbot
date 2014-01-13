@@ -32,7 +32,7 @@ class WordController < ApplicationController
     rescue NotJSONError => e
       render :status => e.status, :json => e.json
     rescue => e
-      render :status => 500 :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
+      render :status => 500, :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
     end
     logger.info('Succeeded word regist.')
   end

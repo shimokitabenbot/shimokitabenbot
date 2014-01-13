@@ -10,7 +10,7 @@
 =end
 require 'spec_helper'
 
-describe WordControllerWordRegist do
+describe WordController do
   # リクエストボディが空
   describe 'Empty request body' do
   end
