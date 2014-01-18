@@ -35,7 +35,7 @@ class NotJSONError < BotError
   def initialize(json)
     super
     @code = '11000001'
-    @message = 'empty_body'
+    @message = 'not_json'
     @detail = json
   end
 end

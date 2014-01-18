@@ -2,6 +2,7 @@
 =begin rdoc
 HTTPリクエストデータの検証を行うモジュール
 =end
+require 'active_support'
 module HTTPRequestValidator
   extend ActiveSupport::Concern
 
@@ -24,10 +25,12 @@ module HTTPRequestValidator
     raise EmptyBodyError if body.nil? or body.size == 0
     json = nil
     begin
-      json = JSON.parse(body)
-    rescue JSONError => e
+      json = ActiveSupport::JSON.decode(body)
+    rescue JSON::ParserError => e
       raise NotJSONError(body)
     end
+    # JSONが空ならばEmptyBodyErrorとする
+    raise EmptyBodyError if json.nil? or json.empty?
     return json
   end
 

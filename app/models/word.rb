@@ -3,25 +3,27 @@
 単語のモデルクラス
 =end
 class Word < ActiveRecord::Base
-#  include ActiveModel::Validations::HelperMethods
+  include ActiveModel::Model
 
-  # エラーメッセージ定数
-  MSG_TOO_LONG_WORD = 'Word is too long.'
-  MSG_TOO_LONG_DESC = 'Description is too long.'
-  MSG_TOO_LONG_EXAM = 'Example is too long.'
-  MSG_TOO_LONG_TRNS = 'Translate is too long.'
+  attr_accessor :id
 
+  # validates_xxx_ofを使うと 
+  # undefined method `validate' for true:TrueClass
+  # が発生するので、項目毎にvalidatesメソッドを呼び出し、条件を書くようにした
+  validates :word,        presence: true,  :length => { :maximum => 16 }
+  validates :description, presence: true,  :length => { :maximum => 32 }
+  validates :example, :length => { :maximum => 64 }
+  validates :translate, :length => { :maximum => 64 }
+  validate :validates_example_and_translate
 
-  # 単語が一意かどうかチェックする
-#  validates_uniqueness_of :word
-
-  # 値が空じゃないかどうかチェックする
-  validates_presence_of :word, :description
-
-  # 文字列の長さをチェックする
-  validates_length_of :word, maximum: 16, too_long: MSG_TOO_LONG_WORD
-  validates_length_of :description, maximum: 32, too_long: MSG_TOO_LONG_DESC
-  validates_length_of :example, maximum: 64, too_long: MSG_TOO_LONG_EXAM, :unless => (@example.nil? or @translate.nil?)
-  validates_length_of :translate, maximum: 64, too_long: MSG_TOO_LONG_TRNS, :unless => (@example.nil? or @translate.nil?)
+  # exampleとtranslateのいずれかがnil/emptyでないかどうか検証する
+  def validates_example_and_translate
+    logger.debug("example=#{example}, translate=#{translate}")
+    if example.nil? or example.empty?
+      errors.add(:example, "Example can't be blank.") unless translate.nil? or translate.empty?
+    elsif translate.nil? or translate.empty?
+      errors.add(:translate, "Translate can't be blank.") unless translate.nil? or example.empty?
+    end
+  end
 
 end

@@ -19,26 +19,26 @@ class WordController < ApplicationController
       # Wordsテーブルに登録する
       id = 0
       logger.debug("record: #{json['word']}, description: #{json['description']}, example: #{json['example']}, translate: #{json['translate']}")
-      Word.new do |w|
+      record = Word.new do |w|
         w.word = json['word']
         w.description = json['description']
         w.example = json['example']
         w.translate = json['translate']
         w.save!
-        id = w.id
       end
       logger.info('Insert record finished.')
-      render :status => 200, :json => { "id" => id, "word" => word}.to_json
-    rescue EmptyBodyError => e
-      logger.error(e)
-      logger.debug("status : #{e.status}, json : #{e.json}")
+      render :status => :created, :json => { "id" => record.id, "word" => record.word}.to_json
+    rescue BotError => e
       render :status => e.status, :json => e.json
-    rescue NotJSONError => e
-      logger.error(e)
-      render :status => e.status, :json => e.json
+    rescue ActiveRecord::RecordInvalid => e
+      if e.message.include?("can't be blank")
+        render :status => :bad_request, :json => {"error" => {"code" => "11000003", "message" => "empty_val", "detail" => e.message }} if e.message.include?("can't be blank")
+      else
+        render :status => :bad_request, :json => {"error" => {"code" => "11000003", "message" => "val_exceeded", "detail" => e.message} } 
+      end
     rescue => e
       logger.error(e)
-      render :status => 500, :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
+      render :status => :internal_server_error, :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
     end
     logger.info('Succeeded word regist.')
   end

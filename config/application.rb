@@ -20,5 +20,11 @@ module Shimokitabenbot
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     I18n.enforce_available_locales = false
+
+    # Logger configurations.
+    config.log_path = "log/#{Rails.env}.log"
+    config.logger = Logger.new(config.log_path)
+    config.logger.formatter = Logger::Formatter.new
+    config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
   end
 end
