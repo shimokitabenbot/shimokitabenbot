@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.2'
+gem 'rails', '4.0.0'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
@@ -30,6 +30,20 @@ gem 'jbuilder', '~> 1.2'
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
+end
+
+# Use RSpec for Testing.
+group :test,:development do
+  gem "rspec"
+  gem "rspec-rails"
+end
+
+# Use PostgreSQL
+gem 'pg', '>= 0.17.1'
+
+# Use Capybara
+group :test, :development do
+  gem "capybara"
 end
 
 # Use ActiveModel has_secure_password
