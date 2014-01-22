@@ -46,6 +46,11 @@ group :test, :development do
   gem "capybara"
 end
 
+# Use Heroku
+group :production do
+  gem 'rails_12factor'
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
@@ -57,3 +62,5 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+ruby "2.0.0"
