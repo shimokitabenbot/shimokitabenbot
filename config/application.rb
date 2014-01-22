@@ -22,9 +22,9 @@ module Shimokitabenbot
     I18n.enforce_available_locales = false
 
     # Logger configurations.
-    config.log_path = "log/#{Rails.env}.log"
-    config.logger = Logger.new(config.log_path)
-    config.logger.formatter = Logger::Formatter.new
-    config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+#    config.log_path = "log/#{Rails.env}.log"
+#    config.logger = Logger.new(config.log_path)
+#    config.logger.formatter = Logger::Formatter.new
+#    config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
   end
 end
