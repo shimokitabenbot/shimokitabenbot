@@ -25,7 +25,8 @@ module HTTPRequestValidator
     raise EmptyBodyError if body.nil? or body.size == 0
     json = nil
     begin
-      json = ActiveSupport::JSON.decode(body)
+      #json = ActiveSupport::JSON.decode(body)
+      json = ActiveSupport::JSON.encode(body)
     rescue JSON::ParserError => e
       raise NotJSONError(body)
     end
