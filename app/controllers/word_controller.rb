@@ -28,6 +28,7 @@ class WordController < ApplicationController
       end
       logger.info('Insert record finished.')
       render :status => :created, :json => { "id" => record.id, "word" => record.word}.to_json
+      logger.info('Succeeded word regist.')
     rescue BotError => e
       render :status => e.status, :json => e.json
     rescue ActiveRecord::RecordInvalid => e
@@ -38,9 +39,8 @@ class WordController < ApplicationController
       end
     rescue => e
       logger.error(e)
-      render :status => :internal_server_error, :json => {"error" => {"code" => '51000001', "message" => e.message, "detail" => ''}}.to_json
+      render :status => :internal_server_error, :json => {"error" => {"code" => '51000001', "message" => e.inspect, "detail" => e.backtrace}}.to_json
     end
-    logger.info('Succeeded word regist.')
   end
 
   # 単語検索を行う
