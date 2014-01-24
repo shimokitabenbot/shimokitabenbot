@@ -11,7 +11,7 @@ class WordController < ApplicationController
     json = nil
     begin
       body = request.body
-      logger.into(param['word'])
+      logger.into(params[:word])
       logger.debug("req_body: #{body}")
       # リクエストボディをチェックする
       json = validate_body_and_parse_json(body)
