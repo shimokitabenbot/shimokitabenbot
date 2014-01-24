@@ -8,8 +8,10 @@ class WordController < ApplicationController
   # 単語登録を行う
   def create
     logger.info('Start word regist.')
+    json = nil
     begin
       body = request.body
+      logger.into("#{param['word']")
       logger.debug("req_body: #{body}")
       # リクエストボディをチェックする
       json = validate_body_and_parse_json(body)
@@ -39,7 +41,7 @@ class WordController < ApplicationController
       end
     rescue => e
       logger.error(e)
-      render :status => :internal_server_error, :json => {"error" => {"code" => '51000001', "message" => e.inspect, "detail" => e.backtrace}}.to_json
+      render :status => :internal_server_error, :json => {"error" => {"code" => '51000001', "message" => e.inspect, "detail" => json.to_s}}.to_json
     end
   end
 
