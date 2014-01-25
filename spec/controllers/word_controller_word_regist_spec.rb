@@ -19,7 +19,6 @@ describe WordController, :controller => 'words' do
   end
 
   describe 'Empty request body' do
-
     # リクエストボディが空
     it 'bad request' do  
       post 'create' 
@@ -37,16 +36,16 @@ describe WordController, :controller => 'words' do
   # リクエストボディに値が存在しない
   describe 'Value not found' do
     it 'word is empty' do
-      param = {"word"=>"", "description" => "わたし", 
+      params = {"word"=>"", "description" => "わたし", 
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      post 'create', params.to_json
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('empty_val')
+      expect(err['message']).to eq('empty_value')
       expect(err['detail']).not_to be_nil
     end
   end
@@ -55,10 +54,10 @@ describe WordController, :controller => 'words' do
   describe 'Value Exceeded' do
     it 'word is exceeded' do
       wrd = "a" * 17
-      param = {"word"=>wrd, "description" => "わたし",
+      params = {"word"=>wrd, "description" => "わたし",
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      post 'create', params.to_json
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
@@ -73,10 +72,10 @@ describe WordController, :controller => 'words' do
   # 正常終了
   describe 'Succeeded' do
     it 'suceeded' do
-      param = {"word"=>"わい", "description" => "わたし",
+      params = {"word"=>"わい", "description" => "わたし",
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      post 'create', params.to_json
       expect(response.status).to eq(201)
       res_body = JSON.parse(response.body)
       id = res_body['id']

@@ -10,4 +10,24 @@ class ApplicationController < ActionController::Base
   # * AUTH_USER : BASIC認証ユーザID
   # * AUTH_PASS : BASIC認証パスワード
   http_basic_authenticate_with name: ENV['AUTH_USER'], password: ENV['AUTH_PASS']
+
+  # 例外ハンドル
+  rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid_error
+  rescue_from EmptyBodyError, :with => :empty_body_error 
+
+protected
+  def record_invalid_error(exception = nil)
+    logger.info("error message: #{exception.message}")
+    if exception.message.include?("can't be blank")
+      e = EmptyValueError.new(exception.message)
+      render :status => e.status, :json => e.json
+    else
+      e = ValueExceededError.new
+      render :status => e.status, :json => e.json
+    end
+  end
+
+  def empty_body_error(exception = nil)
+    render :status => exception.status, :json => exception.json
+  end
 end
