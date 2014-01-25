@@ -30,6 +30,7 @@ class WordController < ApplicationController
     rescue BotError => e
       render :status => e.status, :json => e.json
     rescue ActiveRecord::RecordInvalid => e
+      logger.debug("error message: #{e.message}")
       if e.message.include?("can't be blank")
         render :status => :bad_request, :json => {"error" => {"code" => "11000003", "message" => "empty_val", "detail" => e.message }} if e.message.include?("can't be blank")
       else
