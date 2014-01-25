@@ -1,3 +1,2 @@
 rvm use 2.0.0
-rvm gemset create rails4
 rvm gemset use rails4
