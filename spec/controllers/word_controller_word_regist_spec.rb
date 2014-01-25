@@ -45,8 +45,8 @@ describe WordController, :controller => 'words' do
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('value_exceeded')
-      expect(err['detail']).to eq('Validation failed: Word is too long (maximum is 16 characters)')
+      expect(err['message']).to eq('empty_value')
+      expect(err['detail']).to eq("Validation failed: Word can't be blank")
     end
 
   end
