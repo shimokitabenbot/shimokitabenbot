@@ -30,16 +30,6 @@ class EmptyBodyError < BotError
   end
 end
 
-# リクエストボディがJSONではないエラー
-class NotJSONError < BotError
-  def initialize(json)
-    super
-    @code = '11000001'
-    @message = 'not_json'
-    @detail = json
-  end
-end
-
 # JSONのキーに対応する値が空
 class EmptyValueError < BotError
   def initialize(key)
