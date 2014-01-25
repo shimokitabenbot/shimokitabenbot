@@ -6,7 +6,7 @@
 class BotError < Exception
   attr_accessor :code, :message, :detail, :status
 
-  def initialize
+  def initialize(val = nil)
     @status = 400
   end
 
@@ -46,6 +46,15 @@ class EmptyValueError < BotError
     super
     @code = '11000003'
     @message = 'empty_value'
+    @detail = key
+  end
+end
+
+class ValueExceededError < BotError
+  def initialize(key)
+    super
+    @code = '11000003'
+    @message = 'value_exceeded'
     @detail = key
   end
 end

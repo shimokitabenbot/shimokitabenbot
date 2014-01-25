@@ -19,7 +19,6 @@ describe WordController, :controller => 'words' do
   end
 
   describe 'Empty request body' do
-
     # リクエストボディが空
     it 'bad request' do  
       post 'create' 
@@ -46,7 +45,7 @@ describe WordController, :controller => 'words' do
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('empty_val')
+      expect(err['message']).to eq('empty_value')
       expect(err['detail']).not_to be_nil
     end
   end
