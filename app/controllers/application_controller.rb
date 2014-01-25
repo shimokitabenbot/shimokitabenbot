@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+require 'bot_error'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
 
