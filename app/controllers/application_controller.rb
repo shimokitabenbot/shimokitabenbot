@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'bot_error'
-require 'activerecord'
+#require 'activerecord'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
 
@@ -25,7 +25,7 @@ protected
       e = EmptyValueError.new(exception.message)
       render :status => e.status, :json => e.json
     else
-      e = ValueExceededError.new
+      e = ValueExceededError.new(exception.message)
       render :status => e.status, :json => e.json
     end
   end
