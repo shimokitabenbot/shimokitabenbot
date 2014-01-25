@@ -8,8 +8,7 @@ class WordController < ApplicationController
   # 単語登録を行う
   def create
     logger.info('Start word regist.')
-      body = request.body
-
+    raise EmptyBodyError if params.nil? or !params.has_key?(:description)
     # Wordsテーブルに登録する
     id = 0
     logger.debug("#{params[:word]}, #{params[:decription]}, #{params[:example]}, #{params[:translate]}")

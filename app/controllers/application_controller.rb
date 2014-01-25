@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
 
   # 例外ハンドル
   rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid_error
+  rescue_from EmptyBodyError, :with => :empty_body_error 
 
 protected
   def record_invalid_error(exception = nil)
@@ -24,5 +25,9 @@ protected
       e = ValueExceededError.new
       render :status => e.status, :json => e.json
     end
+  end
+
+  def empty_body_error(exception = nil)
+    render :status => exception.status, :json => exception.json
   end
 end
