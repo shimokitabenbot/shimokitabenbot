@@ -39,32 +39,14 @@ describe WordController, :controller => 'words' do
       params = {"word"=>"", "description" => "わたし", 
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', params.to_json
+      post 'create', params
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('empty_value')
-      expect(err['detail']).not_to be_nil
-    end
-  end
-
-  # 入力値が文字列超過した場合
-  describe 'Value Exceeded' do
-    it 'word is exceeded' do
-      wrd = "a" * 17
-      params = {"word"=>wrd, "description" => "わたし",
-              "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
-              "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', params.to_json
-      expect(response.status).to eq(400)
-      res_body = JSON.parse(response.body)
-      err = res_body['error']
-      expect(err).not_to be_nil
-      expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('val_exceeded')
-      expect(err['detail']).not_to be_nil
+      expect(err['message']).to eq('value_exceeded')
+      expect(err['detail']).to eq('Validation failed: Word is too long (maximum is 16 characters)')
     end
 
   end
@@ -75,7 +57,7 @@ describe WordController, :controller => 'words' do
       params = {"word"=>"わい", "description" => "わたし",
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', params.to_json
+      post 'create', params
       expect(response.status).to eq(201)
       res_body = JSON.parse(response.body)
       id = res_body['id']

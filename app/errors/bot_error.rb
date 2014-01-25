@@ -3,7 +3,7 @@
 エラークラス
 =end
 # エラー基底クラス。
-class BotError < Exception
+class BotError < StandardError 
   attr_accessor :code, :message, :detail, :status
 
   def initialize(val = nil)
