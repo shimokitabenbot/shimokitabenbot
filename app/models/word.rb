@@ -4,6 +4,8 @@
 =end
 class Word < ActiveRecord::Base
   include ActiveModel::Model
+  include ModelValidator::Word
+  include ModelToJSON::Word
 
   attr_accessor :id
 
@@ -14,16 +16,9 @@ class Word < ActiveRecord::Base
   validates :description, presence: true,  :length => { :maximum => 32 }
   validates :example, :length => { :maximum => 64 }
   validates :translate, :length => { :maximum => 64 }
-  validate :validates_example_and_translate
+  validate :validates_example_and_translate :example, :translate
 
-  # exampleとtranslateのいずれかがnil/emptyでないかどうか検証する
-  def validates_example_and_translate
-    logger.debug("example=#{example}, translate=#{translate}")
-    if example.nil? or example.empty?
-      errors.add(:example, "Example can't be blank.") unless translate.nil? or translate.empty?
-    elsif translate.nil? or translate.empty?
-      errors.add(:translate, "Translate can't be blank.") unless translate.nil? or example.empty?
-    end
+  def json
+    return ModelToJSON::Word.to_json(this)
   end
-
 end

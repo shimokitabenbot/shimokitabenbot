@@ -8,8 +8,6 @@ class WordController < ApplicationController
   # 単語登録を行う
   def create
     logger.info('Start word regist.')
-    logger.debug("params.nil? #{params.nil?}")
-    logger.debug("!params.has_key?(:description) #{!params.has_key?(:description)}")
     raise EmptyBodyError if params.nil? or !params.has_key?(:description)
     # Wordsテーブルに登録する
     id = 0
@@ -28,14 +26,49 @@ class WordController < ApplicationController
       render :status => :created, :json => { "id" => record.id, "word" => record.word}.to_json
       logger.info('Succeeded word regist.')
     rescue ActiveRecord::RecordInvalid => e
-      raise EmptyValueError, e.message if e.message.include?("can't be blank")
-      raise ValueExceededError, e.message if e.message.include?("too long")
+      if e.message.include?("can't be blank")
+        logger.error(e)
+        raise EmptyValueError, e.message 
+      elsif e.message.include?("too long")
+        logger.error(e)
+        raise ValueExceededError, e.message
+      else
+        logger.error(e)
+        raise BotInternalError, e.message
+      end
+    rescue => e
+      logger.error(e)
+      raise BotInternalError, e.message
     end
   end
 
   # 単語検索を行う
   def search
-    
+    logger.info("Start word search.")
+    validate_match_type(params[:match_type]) if params[:match_type]
+
+    words = nil
+    if params[:q]
+      # 単語が指定されている場合、単語検索
+      if params[:match_type].nil? or params[:match_type] == 'complete'
+        words = Word.where(:word => params[:q])
+      elsif params[:match_type] == 'part'
+        words = Word.where(["word like %?%", params[:q]])
+      end
+    else
+      # 単語が指定されていない場合、全件検索
+      words = Word.all 
+    end
+    if words.nil? or words.empty?
+      render :status => :not_found
+    else
+      json = []
+      words.each do |w|
+        json << w.json
+      end
+      render :status => :ok, :json => json.to_json
+    end
+    logger.info("Succeeded word search")
   end
 
 end
