@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'bot_error'
-#require 'activerecord'
+require 'active_record/errors'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
 
