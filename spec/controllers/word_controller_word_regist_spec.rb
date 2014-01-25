@@ -19,7 +19,6 @@ describe WordController, :controller => 'words' do
   end
 
   describe 'Empty request body' do
-
     # リクエストボディが空
     it 'bad request' do  
       post 'create' 
@@ -37,46 +36,44 @@ describe WordController, :controller => 'words' do
   # リクエストボディに値が存在しない
   describe 'Value not found' do
     it 'word is empty' do
-      param = {"word"=>"", "description" => "わたし", 
+      params = {"word"=>"", "description" => "わたし", 
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      post 'create', params
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('empty_val')
-      expect(err['detail']).not_to be_nil
+      expect(err['message']).to eq('empty_value')
+      expect(err['detail']).to eq("Validation failed: Word can't be blank")
     end
   end
 
-  # 入力値が文字列超過した場合
   describe 'Value Exceeded' do
     it 'word is exceeded' do
       wrd = "a" * 17
-      param = {"word"=>wrd, "description" => "わたし",
-              "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
-              "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      params = {"word"=>wrd, "description" => "わたし",
+               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
+               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
+      post 'create', params
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
-      expect(err['message']).to eq('val_exceeded')
-      expect(err['detail']).not_to be_nil
+      expect(err['message']).to eq('value_exceeded')
+      expect(err['detail']).to eq("Validation failed: Word is too long (maximum is 16 characters)")
     end
-
   end
 
   # 正常終了
   describe 'Succeeded' do
     it 'suceeded' do
-      param = {"word"=>"わい", "description" => "わたし",
+      params = {"word"=>"わい", "description" => "わたし",
               "example" => "わいがモテないのはどう考えてもおめだぢが悪い。",
               "translate" => "私がモテないのはどう考えてもおまえらが悪い。"}
-      post 'create', param.to_json
+      post 'create', params
       expect(response.status).to eq(201)
       res_body = JSON.parse(response.body)
       id = res_body['id']

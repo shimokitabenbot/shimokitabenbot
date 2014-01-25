@@ -3,10 +3,10 @@
 エラークラス
 =end
 # エラー基底クラス。
-class BotError < Exception
+class BotError < StandardError 
   attr_accessor :code, :message, :detail, :status
 
-  def initialize
+  def initialize(val = nil)
     @status = 400
   end
 
@@ -30,22 +30,21 @@ class EmptyBodyError < BotError
   end
 end
 
-# リクエストボディがJSONではないエラー
-class NotJSONError < BotError
-  def initialize(json)
-    super
-    @code = '11000001'
-    @message = 'not_json'
-    @detail = json
-  end
-end
-
 # JSONのキーに対応する値が空
 class EmptyValueError < BotError
   def initialize(key)
     super
     @code = '11000003'
     @message = 'empty_value'
+    @detail = key
+  end
+end
+
+class ValueExceededError < BotError
+  def initialize(key)
+    super
+    @code = '11000003'
+    @message = 'value_exceeded'
     @detail = key
   end
 end

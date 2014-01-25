@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+require 'bot_error'
 class ApplicationController < ActionController::Base
-  include HTTPRequestValidator
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -10,4 +11,9 @@ class ApplicationController < ActionController::Base
   # * AUTH_USER : BASIC認証ユーザID
   # * AUTH_PASS : BASIC認証パスワード
   http_basic_authenticate_with name: ENV['AUTH_USER'], password: ENV['AUTH_PASS']
+
+  # 例外ハンドル
+  rescue_from BotError do |err|
+    render :status => err.status, :json => err.json
+  end
 end
