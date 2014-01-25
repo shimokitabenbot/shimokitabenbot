@@ -2,7 +2,6 @@
 require 'bot_error'
 require 'active_record/errors'
 class ApplicationController < ActionController::Base
-  include HTTPRequestValidator
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -15,7 +14,11 @@ class ApplicationController < ActionController::Base
   http_basic_authenticate_with name: ENV['AUTH_USER'], password: ENV['AUTH_PASS']
 
   # 例外ハンドル
-  rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid_error
+#  rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid_error
+  rescue_from ActiveRecord::RecordInvalid do |err|
+    record_invalid_error(err)
+  end
+
   rescue_from EmptyBodyError, :with => :empty_body_error 
 
 protected
