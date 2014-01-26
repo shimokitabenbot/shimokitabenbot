@@ -1,0 +1,15 @@
+one:
+  word: しかへる
+  description: 教える
+  example: しかへで、エライ人。
+  translate: 教えて、エライ人。
+two:
+  word: わらし
+  description: こども
+  example: わらしめんけ。
+  translate: こどもかわいい。
+three:
+  word: おめ
+  description: あなた
+  example: おめどなあ。
+  translate: おまえらなあ。
