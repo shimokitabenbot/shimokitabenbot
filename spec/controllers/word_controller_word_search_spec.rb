@@ -21,6 +21,7 @@ describe WordController, :controller => 'words' do
 
   after(:all) do
     # テストデータ削除は1回だけ
+   Word.destroy_all
   end
 
   # 検索条件間違い
@@ -54,11 +55,10 @@ describe WordController, :controller => 'words' do
       get 'search', {:q => "しかへる"}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
-      expect(res_body['id']).not_to be_nil
-      expect(res_body['word']).to eq('しかへる')
-      expect(res_body['description']).to eq('教える')
-      expect(res_body['example']).to eq('しかへで、エライ人。')
-      expect(res_body['translate']).to eq('教えて、エライ人。')
+      expect(res_body[0]['word']).to eq('しかへる')
+      expect(res_body[0]['description']).to eq('教える')
+      expect(res_body[0]['example']).to eq('しかへで、エライ人。')
+      expect(res_body[0]['translate']).to eq('教えて、エライ人。')
     end
   end
 
@@ -68,11 +68,10 @@ describe WordController, :controller => 'words' do
       get 'search', {:q => "しかへる", :match_type => 'complete'}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
-      expect(res_body['id']).not_to be_nil
-      expect(res_body['word']).to eq('しかへる')
-      expect(res_body['description']).to eq('教える')
-      expect(res_body['example']).to eq('しかへで、エライ人。')
-      expect(res_body['translate']).to eq('教えて、エライ人。')
+      expect(res_body[0]['word']).to eq('しかへる')
+      expect(res_body[0]['description']).to eq('教える')
+      expect(res_body[0]['example']).to eq('しかへで、エライ人。')
+      expect(res_body[0]['translate']).to eq('教えて、エライ人。')
     end
   end
 
@@ -82,11 +81,10 @@ describe WordController, :controller => 'words' do
       get 'search', {:q => "かへ", :match_type => 'part'}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
-      expect(res_body['id']).not_to be_nil
-      expect(res_body['word']).to eq('しかへる')
-      expect(res_body['description']).to eq('教える')
-      expect(res_body['example']).to eq('しかへで、エライ人。')
-      expect(res_body['translate']).to eq('教えて、エライ人。')
+      expect(res_body[0]['word']).to eq('しかへる')
+      expect(res_body[0]['description']).to eq('教える')
+      expect(res_body[0]['example']).to eq('しかへで、エライ人。')
+      expect(res_body[0]['translate']).to eq('教えて、エライ人。')
     end
   end
 
@@ -97,19 +95,16 @@ describe WordController, :controller => 'words' do
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
       expect(res_body.size).to eq(3) 
-      expect(res_body[0]['id']).not_to be_nil
       expect(res_body[0]['word']).to eq('しかへる')
       expect(res_body[0]['description']).to eq('教える')
       expect(res_body[0]['example']).to eq('しかへで、エライ人。')
       expect(res_body[0]['translate']).to eq('教えて、エライ人。')
 
-      expect(res_body[1]['id']).not_to be_nil
       expect(res_body[1]['word']).to eq('わらし')
       expect(res_body[1]['description']).to eq('こども')
       expect(res_body[1]['example']).to eq('わらしめんけ。')
       expect(res_body[1]['translate']).to eq('こどもかわいい。')
 
-      expect(res_body[2]['id']).not_to be_nil
       expect(res_body[2]['word']).to eq('おめ')
       expect(res_body[2]['description']).to eq('あなた')
       expect(res_body[2]['example']).to eq('おめどなあ。')

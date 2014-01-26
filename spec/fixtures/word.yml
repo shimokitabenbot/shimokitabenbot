@@ -1,14 +1,17 @@
 one:
+  id: 1
   word: しかへる
   description: 教える
   example: しかへで、エライ人。
   translate: 教えて、エライ人。
 two:
+  id: 2
   word: わらし
   description: こども
   example: わらしめんけ。
   translate: こどもかわいい。
 three:
+  id: 3
   word: おめ
   description: あなた
   example: おめどなあ。

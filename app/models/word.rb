@@ -4,7 +4,6 @@
 =end
 class Word < ActiveRecord::Base
   include ActiveModel::Model
-  include ModelToJSON
 
   attr_accessor :id
 
@@ -23,9 +22,5 @@ class Word < ActiveRecord::Base
     elsif translate.nil? or translate.empty?
       errors.add(:translate, "Translate can't be blank.") unless translate.nil? or example.empty?
     end
-  end
-
-  def json
-    return ModelToJSON::Word.to_json(this)
   end
 end
