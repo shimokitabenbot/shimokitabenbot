@@ -2,7 +2,6 @@
 =begin rdoc
 単語のモデルクラス
 =end
-require 'model_validator'
 class Word < ActiveRecord::Base
   include ActiveModel::Model
   include ModelToJSON
