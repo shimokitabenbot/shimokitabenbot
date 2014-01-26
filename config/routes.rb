@@ -6,18 +6,10 @@ Shimokitabenbot::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
-#  resources "word", :controller => 'word', :path => 'word', :only => [:create, :search]
-#  resources "word", :controller => 'word', :path => 'word' do
-#    collection do
-#      get 'search'
-#      post 'create'
-#    end
-#  end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   get 'word' => 'word#search'
   post 'word' => 'word#create'
-
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
