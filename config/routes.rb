@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 Shimokitabenbot::Application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -5,11 +6,10 @@ Shimokitabenbot::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
-#  post 'words' => 'words#create'
-
-  resources "word", :controller => 'word', :path => 'word', :only => [:create]
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
+  get 'word' => 'word#search'
+  post 'word' => 'word#create'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

@@ -13,9 +13,15 @@ require 'base64'
 
 describe WordController, :controller => 'words' do
 
+  # リクエストパラメータ
   before(:each) do
     @request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64::encode64("name:password")
     @request.env['CONTENT_TYPE'] = 'application/json'
+  end
+
+  # レコード削除
+  after(:all) do
+    Word.destroy_all
   end
 
   describe 'Empty request body' do
