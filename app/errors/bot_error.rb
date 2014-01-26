@@ -40,11 +40,31 @@ class EmptyValueError < BotError
   end
 end
 
+# 文字数オーバー
 class ValueExceededError < BotError
   def initialize(key)
     super
     @code = '11000003'
     @message = 'value_exceeded'
     @detail = key
+  end
+end
+
+class MatchTypeError < BotError
+  def initialize(key)
+    super
+    @code = '11000003'
+    @message = 'match_type_error'
+    @detail = key
+  end
+end
+
+# 内部エラー
+class BotInternalError < BotError
+  def initialize(detail)
+    @status = 500
+    @code = '53000001'
+    @message = 'internal_error'
+    @detail = detail
   end
 end
