@@ -61,7 +61,7 @@ class WordController < ApplicationController
     end
     if words.nil? or words.empty?
       # 何も返さない場合は、JSONを空にしないとエラー
-      render :status => :not_found, :json => [{}].to_json
+      render :status => :not_found, :json => {}.to_json
     else
       render :status => :ok, :json => words.to_json
     end
