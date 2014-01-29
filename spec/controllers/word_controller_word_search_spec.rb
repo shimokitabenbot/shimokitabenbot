@@ -27,7 +27,7 @@ describe WordController, :controller => 'words' do
   # 検索条件間違い
   describe 'Wrong match type' do
     it 'Match type is "none"' do
-      get 'search', {:q => "おめ", :match_type => "none"}
+      get 'search', {:word => "おめ", :match_type => "none"}
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
@@ -41,7 +41,7 @@ describe WordController, :controller => 'words' do
   # 単語が見つからない
   describe 'Word not found' do
     it 'Word not found' do
-      get 'search', {:q => "にほん"}
+      get 'search', {:word => "にほん"}
       expect(response.status).to eq(404)
       res_body = JSON.parse(response.body)
       err = res_body['error']
@@ -52,7 +52,7 @@ describe WordController, :controller => 'words' do
   # 単語検索(完全一致：パラメータ指定なし)
   describe 'word completed no param' do
     it 'Word is found' do
-      get 'search', {:q => "しかへる"}
+      get 'search', {:word => "しかへる"}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
       expect(res_body[0]['word']).to eq('しかへる')
@@ -65,7 +65,7 @@ describe WordController, :controller => 'words' do
   # 単語検索(完全一致：パラメータ指定あり)
   describe 'word completed param exist' do
     it 'Word is found' do
-      get 'search', {:q => "しかへる", :match_type => 'complete'}
+      get 'search', {:word => "しかへる", :match_type => 'complete'}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
       expect(res_body[0]['word']).to eq('しかへる')
@@ -78,7 +78,7 @@ describe WordController, :controller => 'words' do
   # 単語検索(部分一致)
   describe 'word parted' do
     it 'Word is found' do
-      get 'search', {:q => "かへ", :match_type => 'part'}
+      get 'search', {:word => "かへ", :match_type => 'part'}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
       expect(res_body[0]['word']).to eq('しかへる')

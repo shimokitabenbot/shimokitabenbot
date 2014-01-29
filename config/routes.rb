@@ -10,7 +10,7 @@ Shimokitabenbot::Application.routes.draw do
   #   get 'products/:id' => 'catalog#view'
   get 'word' => 'word#search'
   post 'word' => 'word#create'
-
+  post 'tweet' => 'tweet#twitter'
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
