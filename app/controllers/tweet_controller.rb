@@ -7,7 +7,7 @@ require 'twitter'
 require 'date'
 class TweetController < ApplicationController
 
-  MAX_RETRT_COUNT = 6
+  MAX_RETRY_COUNT = 6
 
   # Twitterにつぶやく
   # HTTPリクエスト: POST
