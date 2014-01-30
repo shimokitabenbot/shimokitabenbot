@@ -7,11 +7,14 @@ require 'twitter'
 require 'date'
 class TweetController < ApplicationController
 
+  MAX_RETRT_COUNT = 6
+
   # Twitterにつぶやく
   # HTTPリクエスト: POST
   def twitter
     # 単語を一つランダムに取得する
     tweet = nil
+    retry_count = 1
     begin
       logger.info("単語検索")
       word = Word.all.sample
@@ -32,7 +35,14 @@ class TweetController < ApplicationController
       raise AccessUnabledError, e.message
     rescue Twitter::Error::AlreadyPosted => e
       logger.warn("Already posted: #{tweet}")
-      retry
+      if retry_count < MAX_RETRY_COUNT
+        retry_count += 1
+        sleep 10
+        retry
+      else
+        logger.error("Tweet Failed.")
+        raise TwitterFailedError, tweet
+      end
     rescue Twitter::Error=> e
       logger.error(e)
       raise TwitterFailedError, tweet
