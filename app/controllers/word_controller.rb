@@ -48,7 +48,7 @@ class WordController < ApplicationController
     validate_match_type(params[:match_type]) if params[:match_type]
 
     words = nil
-    if params[:word]
+    if params[:word] and !params[:word].empty?
       # 単語が指定されている場合、単語検索
       if params[:match_type].nil? or params[:match_type] == 'complete'
         logger.info("完全一致")
