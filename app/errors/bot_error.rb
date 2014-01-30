@@ -68,3 +68,34 @@ class BotInternalError < BotError
     @detail = detail
   end
 end
+
+# データベースエラー
+class BotDatabaseError < BotError
+  def initialize(detail)
+    @status = 500
+    @code = '51000001'
+    @message = 'database_error'
+    @detail = detail
+  end
+end
+
+# Twitterアクセスエラー
+class AccessUnabledError < BotError
+  def initialize(detail)
+    @status = 500
+    @code = '52000001'
+    @message = 'access_unabled'
+    @detail = detail
+  end
+end
+
+# Twitter失敗
+class TwitterFailedError < BotError
+  def initialize(detail)
+    @status = 500
+    @code = '52000002'
+    @message = 'twitter_failed'
+    @detail = detail
+  end
+end
+

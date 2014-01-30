@@ -48,21 +48,26 @@ class WordController < ApplicationController
     validate_match_type(params[:match_type]) if params[:match_type]
 
     words = nil
-    if params[:q]
+    if params[:word] and !params[:word].empty?
       # 単語が指定されている場合、単語検索
       if params[:match_type].nil? or params[:match_type] == 'complete'
-        words = Word.where(:word => params[:q])
+        logger.info("完全一致")
+        words = Word.where(:word => params[:word])
       elsif params[:match_type] == 'part'
-        words = Word.where(["word like ?", "%#{params[:q]}%"])
+        logger.info("部分一致")
+        words = Word.where(["word like ?", "%#{params[:word]}%"])
       end
     else
+      logger.info("全件検索")
       # 単語が指定されていない場合、全件検索
       words = Word.all 
     end
     if words.nil? or words.empty?
+      logger.info("Not found")
       # 何も返さない場合は、JSONを空にしないとエラー
       render :status => :not_found, :json => {}.to_json
     else
+      logger.info("検索件数: #{words.size}")
       render :status => :ok, :json => words.to_json
     end
     logger.info("Succeeded word search")
