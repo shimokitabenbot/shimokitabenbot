@@ -1,0 +1,25 @@
+one:
+  id: 1
+  word: しかへる
+  description: 教える
+  example: しかへで、エライ人。
+  translate: 教えて、エライ人。
+two:
+  id: 2
+  word: ふくし
+  description: ふくし
+  example: あああ
+  translate: いいい
+three:
+  id: 3
+  word: ふくし
+  description: あなた
+  example: おめどなあ。
+  translate: おまえらなあ。
+four:
+  id: 4
+  word: わい
+  description: 私。僕。俺。
+  example: わいの鞄取って。
+  translate: 私の鞄取って。
+

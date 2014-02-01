@@ -73,4 +73,51 @@ class WordController < ApplicationController
     logger.info("Succeeded word search")
   end
 
+  # 単語更新を行う
+  def update
+    logger.info("Start word update.")
+    word = nil
+    if params[:id] and !params[:id].empty?
+      word = Word.find(params[:id])
+    elsif params[:word] and !params[:word].empty?
+      word = Word.where("word" => params[:word])
+    else
+      logger.warn("No id and word.")
+      raise NoIdAndWordError
+    end
+
+    begin    
+      if word and word.is_a?(Word)
+        word.example = params[:example]
+        word.translate = params[:translate]
+        word.save!
+        render :status => 200, :json => word.json
+        logger.info("Succeeded word update.")
+      else
+        if word.is_a?(Array)
+          raise SomeWordsForUpdateError, word.json
+        elsif word.nil? or word.empty?
+          render :status => :not_found, :json => {}
+        else
+          raise BotInternalError, 'unexpected_error'
+        end          
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      if e.message.include?("can't be blank")
+        logger.error(e)
+        raise EmptyValueError, e.message 
+      elsif e.message.include?("too long")
+        logger.error(e)
+        raise ValueExceededError, e.message
+      else
+        logger.error(e)
+        raise BotInternalError, e.message
+      end
+    rescue BotInternalError => e
+      raise e
+    rescue => e
+      raise BotInternalError, e.message
+    end
+  end
+
 end
