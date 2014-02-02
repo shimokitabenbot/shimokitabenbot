@@ -28,7 +28,7 @@ describe WordController, :controller => 'words' do
   # Bad Request
   describe 'Bad Request' do
     it 'No Id and Word empty' do
-      put 'update', {:word => "", :id => ""}
+      put 'update', {:word => "", :id => nil}
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']

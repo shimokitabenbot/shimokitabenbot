@@ -78,7 +78,7 @@ class WordController < ApplicationController
     logger.info("Start word update.")
     word = nil
     begin
-      if params[:id] and !params[:id].empty?
+      if params[:id] 
         word = Word.find(params[:id])
       elsif params[:word] and !params[:word].empty?
         word = Word.where("word" => params[:word])
