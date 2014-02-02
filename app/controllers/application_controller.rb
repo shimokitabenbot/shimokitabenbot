@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'bot_error'
+require 'not_found'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
   
@@ -16,5 +17,9 @@ class ApplicationController < ActionController::Base
   # 例外ハンドル
   rescue_from BotError do |err|
     render :status => err.status, :json => err.json
+  end
+
+  rescue_from NotFound do |err|
+    render :status => 404, :json => {}
   end
 end
