@@ -117,3 +117,4 @@ class SomeWordsForUpdateError < BotError
     @detail = detail
   end
 end
+

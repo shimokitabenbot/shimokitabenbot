@@ -13,6 +13,7 @@ require 'spec_helper'
 require 'base64'
 
 describe WordController, :controller => 'words' do
+  set_fixture_class :word_update => Word
   fixtures :word_update
   before(:each) do
     # リクエストパラメータ設定
@@ -47,14 +48,14 @@ describe WordController, :controller => 'words' do
       expect(err['detail']).to be_nil
     end
     it 'some words' do
-      put update, {:word => "ふくし", :example => "ふくす", :translate => "ふくす"}
+      put 'update', {:word => "ふくし", :example => "ふくす", :translate => "ふくす"}
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
       err = res_body['error']
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
       expect(err['message']).to eq('some_words_for_update')
-      expect(err['detail']).to be_nil
+      expect(err['detail']).not_to be_nil
     end
 
   end
@@ -74,23 +75,24 @@ describe WordController, :controller => 'words' do
   describe 'word update' do
     it 'key = id' do
       word = Word.where("word" => "しかへる")
-      put 'update', {:id => word.id, :word => nil, :example => "おめの嫁しかへろじゃ。", :translate => "お前の嫁教えろよ。"}
+      puts word
+      put 'update', {:id => word.ids[0], :word => nil, :example => "おめの嫁しかへろじゃ。", :translate => "お前の嫁教えろよ。"}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
-      expect(res_body[0]['word']).to eq('しかへる')
-      expect(res_body[0]['description']).to eq('教える')
-      expect(res_body[0]['example']).to eq('おめの嫁しかへろじゃ。')
-      expect(res_body[0]['translate']).to eq('お前の嫁教えろよ。')
+      expect(res_body['word']).to eq('しかへる')
+      expect(res_body['description']).to eq('教える')
+      expect(res_body['example']).to eq('おめの嫁しかへろじゃ。')
+      expect(res_body['translate']).to eq('お前の嫁教えろよ。')
     end
 
     it 'key = word' do
       put 'update', {:id => nil, :word => "わい", :example => "わいどの音楽。", :translate => "僕らの音楽。"}
       expect(response.status).to eq(200)
       res_body = JSON.parse(response.body)
-      expect(res_body[0]['word']).to eq('わい')
-      expect(res_body[0]['description']).to eq('私。僕。俺。')
-      expect(res_body[0]['example']).to eq('わいどの音楽。')
-      expect(res_body[0]['translate']).to eq('僕らの音楽。')
+      expect(res_body['word']).to eq('わい')
+      expect(res_body['description']).to eq('私。僕。俺。')
+      expect(res_body['example']).to eq('わいどの音楽。')
+      expect(res_body['translate']).to eq('僕らの音楽。')
     end
   end
 
