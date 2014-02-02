@@ -65,7 +65,7 @@ class WordController < ApplicationController
     if words.nil? or words.empty?
       logger.info("Not found")
       # 何も返さない場合は、JSONを空にしないとエラー
-      render :status => :not_found, :json => {}.to_json
+      raise NotFound
     else
       logger.info("検索件数: #{words.size}")
       render :status => :ok, :json => words.to_json
@@ -73,4 +73,52 @@ class WordController < ApplicationController
     logger.info("Succeeded word search")
   end
 
+  # 単語更新を行う
+  def update
+    logger.info("Start word update.")
+    word = nil
+    begin
+      if params[:id] and !params[:id].empty?
+        word = Word.find(params[:id])
+      elsif params[:word] and !params[:word].empty?
+        word = Word.where("word" => params[:word])
+        logger.debug("word.ids.size=#{word.ids.size}")
+        if word.ids.size == 0
+          # 更新レコードがない場合
+          raise NotFound
+        elsif word.ids.size > 1
+          raise SomeWordsForUpdateError, word.to_json
+        else
+          word = Word.find(word.ids[0])
+        end
+      else
+        logger.warn("No id and word.")
+        raise NoIdAndWordError
+      end
+      logger.debug("word = #{word.to_s}")    
+
+      # 検索件数が複数ある場合
+      word.update({:example => params[:example], :translate => params[:translate]})
+      render :status => 200, :json => word.to_json
+      logger.info("Succeeded word update.")
+    rescue ActiveRecord::RecordInvalid => e
+      if e.message.include?("can't be blank")
+        logger.error(e)
+        raise EmptyValueError, e.message 
+      elsif e.message.include?("too long")
+        logger.error(e)
+        raise ValueExceededError, e.message
+      else
+        logger.error(e)
+        raise BotInternalError, e.message
+      end
+    rescue BotError => e
+      raise e
+    rescue NotFound => e
+      raise e
+    rescue => e
+      logger.error(e)
+      raise BotInternalError, e.message
+    end
+  end
 end
