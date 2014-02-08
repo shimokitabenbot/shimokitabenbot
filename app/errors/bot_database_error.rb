@@ -2,9 +2,10 @@
 =begin rdoc
 エラークラス
 =end
+require 'bot_internal_error'
 module Shimokitabenbot
   # データベースエラー
-  class BotDatabaseError < Shimokitabenbot::BotInternalError
+  class BotDatabaseError < BotInternalError
     def initialize(detail)
       super(detail)
       @code = '51000001'

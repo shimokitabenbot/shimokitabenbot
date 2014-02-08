@@ -3,6 +3,7 @@ require 'bot_error'
 require 'not_found'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
+  include Shimokitabenbot
   
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.

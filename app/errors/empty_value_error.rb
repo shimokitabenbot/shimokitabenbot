@@ -3,9 +3,10 @@
 エラークラス
 =end
 # エラー基底クラス。
+require 'bot_request_error'
 module Shimokitabenbot
   # JSONのキーに対応する値が空
-  class EmptyValueError < Shimokitabenbot::BotRequestError
+  class EmptyValueError < BotRequestError
     def initialize(detail)
       super(detail)
       @code = '11000003'

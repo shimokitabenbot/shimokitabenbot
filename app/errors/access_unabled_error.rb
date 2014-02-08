@@ -4,7 +4,7 @@
 =end
 module Shimokitabenbot
   # Twitterアクセスエラー
-  class AccessUnabledError < Shimokitabenbot::TwitterError
+  class AccessUnabledError < TwitterError
     def initialize(detail)
       super(detail)
       @code = '52000001'

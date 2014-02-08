@@ -4,7 +4,7 @@
 =end
 # エラー基底クラス。
 module Shimokitabenbot
-  class BotRequestError < Shimokitabenbot::BotError
+  class BotRequestError < BotError
     def initialize(detail = nil)
       @status = 400
       @detail = detail

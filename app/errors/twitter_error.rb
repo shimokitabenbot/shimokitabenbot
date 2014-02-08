@@ -2,8 +2,9 @@
 =begin rdoc
 エラークラス
 =end
+require 'bot_internal_error'
 module Shimokitabenbot
-  class TwitterError < Shimokitabenbot::BotInternalError
+  class TwitterError < BotInternalError
     def initialize(detail)
       super(detail)
     end

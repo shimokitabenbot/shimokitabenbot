@@ -5,7 +5,10 @@ Twitterにつぶやく機能を持つ。
 =end
 require 'twitter'
 require 'date'
+require 'bot_database_error'
+require 'twitter_failed_error'
 class TweetController < ApplicationController
+  include Shimokitabenbot
 
   MAX_RETRY_COUNT = 6
 
@@ -18,7 +21,13 @@ class TweetController < ApplicationController
     begin
       logger.info("単語検索")
 #      word = Word.all.sample
-      id = rand(Word.maximum(:id).to_i)
+      max_id = Word.maximum(:id)
+      logger.debug("max_id : #{max_id}")
+      id = 0
+      10.times do
+        id = rand(max_id.to_i)
+        break if id > 0
+      end
       word = Word.find_by(id: id)
       tweet = word.tweet
       #client = Shimokitabenbot::Application.config.client
