@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   # 例外ハンドル
   rescue_from BotError do |err|
-    render :status => err.status, :json => err.json
+    render :status => err.status, :json => err.to_json
   end
 
   rescue_from NotFound do |err|

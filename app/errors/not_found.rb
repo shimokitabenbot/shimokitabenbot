@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
-class NotFound < StandardError
+module Shimokitabenbot
+  class NotFound < StandardError
+  end
 end

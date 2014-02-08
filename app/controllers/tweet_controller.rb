@@ -17,9 +17,12 @@ class TweetController < ApplicationController
     retry_count = 1
     begin
       logger.info("単語検索")
-      word = Word.all.sample
+#      word = Word.all.sample
+      id = rand(Word.maximum(:id).to_i)
+      word = Word.find_by(id: id)
       tweet = word.tweet
-      client = Shimokitabenbot::Application.config.client
+      #client = Shimokitabenbot::Application.config.client
+      client = Application.config.client
       logger.debug("client: #{client.to_s}")
       logger.info("ツイート")
       logger.debug("内容:\n #{tweet.to_s}")
@@ -48,5 +51,4 @@ class TweetController < ApplicationController
       raise TwitterFailedError, tweet
     end
   end
-
 end
