@@ -3,9 +3,10 @@
 エラークラス
 =end
 # エラー基底クラス。
+require 'bot_request_error'
 module Shimokitabenbot
   # 更新対象単語が複数存在する
-  class SomeWordsForUpdateError < Shimokitabenbot::BotRequestError
+  class SomeWordsForUpdateError < BotRequestError
     def initialize(detail)
       super(detail)
       @code = '11000003'

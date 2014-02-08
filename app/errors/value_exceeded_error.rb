@@ -3,9 +3,10 @@
 エラークラス
 =end
 # エラー基底クラス。
+require 'bot_request_error'
 module Shimokitabenbot
   # 文字数オーバー
-  class ValueExceededError < Shimokitabenbot::BotRequestError
+  class ValueExceededError < BotRequestError
     def initialize(detail)
       super(detail)
       @code = '11000003'
