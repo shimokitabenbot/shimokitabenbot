@@ -3,6 +3,10 @@
 単語登録、更新、削除処理を行うコントローラ
 =end
 require 'bot_error'
+require 'bot_internal_error'
+require 'empty_value_error'
+require 'value_exceeded_error'
+require 'empty_body_error'
 class WordController < ApplicationController
 
   # 単語登録を行う
