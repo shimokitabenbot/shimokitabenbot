@@ -20,17 +20,11 @@ class TweetController < ApplicationController
     retry_count = 1
     begin
       logger.info("単語検索")
-#      word = Word.all.sample
       max_id = Word.maximum(:id)
       logger.debug("max_id : #{max_id}")
-      id = 0
-      10.times do
-        id = rand(max_id.to_i)
-        break if id > 0
-      end
+      id = generate_id(max_id)
       word = Word.find_by(id: id)
       tweet = word.tweet
-      #client = Shimokitabenbot::Application.config.client
       client = Application.config.client
       logger.debug("client: #{client.to_s}")
       logger.info("ツイート")
@@ -60,4 +54,14 @@ class TweetController < ApplicationController
       raise TwitterFailedError, tweet
     end
   end
+
+private
+  def generate_id(max_id)
+    id = 0
+    10.times do
+      id = rand(max_id)
+      return id if id > 0
+    end
+  end
+
 end
