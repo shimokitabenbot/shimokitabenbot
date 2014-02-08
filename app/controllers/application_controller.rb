@@ -3,6 +3,7 @@ require 'bot_error'
 require 'not_found'
 class ApplicationController < ActionController::Base
   include HTTPRequestValidator
+  include Shimokitabenbot
   
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -16,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   # 例外ハンドル
   rescue_from BotError do |err|
-    render :status => err.status, :json => err.json
+    render :status => err.status, :json => err.to_json
   end
 
   rescue_from NotFound do |err|
