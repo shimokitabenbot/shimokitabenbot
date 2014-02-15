@@ -15,7 +15,7 @@ class Word < ActiveRecord::Base
   validate :validates_example_and_translate 
 
   def tweet
-    return "[単語]: #{word}\n[意味]: #{description}\n[例]: #{example}\n(#{translate})\n#下北弁"
+    return "[単語]: #{word}\n[意味]: #{description}\n[用例]: #{example}\n(#{translate})\n#下北弁"
   end
 
 private
