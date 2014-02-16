@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140105051441) do
+ActiveRecord::Schema.define(version: 20140216063552) do
+
+  create_table "sentences", force: true do |t|
+    t.string   "sentence",   limit: 76, null: false
+    t.string   "hashtag",    limit: 76, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "words", force: true do |t|
     t.string   "word",        limit: 16, null: false
