@@ -33,6 +33,16 @@ class TweetController < ApplicationController
       logger.debug("result: #{res.to_s}")
       created_at = res['created_at']
       render :status => :created, :json => { "tweet" => tweet, "twittered_at" => created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }.to_json
+    rescue NoMethodError => e
+      logger.warn("Word is not found.")
+      if retry_count < MAX_RETRY_COUNT
+        retry_count += 1
+        sleep 10
+        retry
+      else
+        logger.error("Tweet Failed.")
+        raise BotInternalError, tweet
+      end
     rescue ActiveRecord::ActiveRecordError => e
       logger.error(e)
       raise BotDatabaseError, e.message
