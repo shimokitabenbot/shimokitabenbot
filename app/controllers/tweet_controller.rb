@@ -20,10 +20,7 @@ class TweetController < ApplicationController
     retry_count = 1
     begin
       logger.info("単語検索")
-      max_id = Word.maximum(:id)
-      logger.debug("max_id : #{max_id}")
-      id = generate_id(max_id)
-      word = Word.find_by(id: id)
+      word = find_word
       tweet = word.tweet
       client = Application.config.client
       logger.debug("client: #{client.to_s}")
@@ -32,6 +29,8 @@ class TweetController < ApplicationController
       res = client.update(tweet)
       logger.debug("result: #{res.to_s}")
       created_at = res['created_at']
+      word.last_twittered_at = created_at
+      word.save!
       render :status => :created, :json => { "tweet" => tweet, "twittered_at" => created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }.to_json
     rescue NoMethodError => e
       logger.warn("Word is not found.")
@@ -66,12 +65,30 @@ class TweetController < ApplicationController
   end
 
 private
-  def generate_id(max_id)
+  def generate_id
+    max_id = Word.maximum(:id)
     id = 0
     10.times do
-      id = rand(max_id)
-      return id if id > 0
+      id = rand(max_id) + 1
+      return id
     end
+  end
+
+  def find_word
+    while true do
+      id = generate_id
+      word = Word.find_by(id: id)
+      return word if canTwitter(word.last_twittered_at)
+    end
+  end
+
+  def canTwitter(last_twittered_at)
+    logger.debug(last_twittered_at)
+    return true if last_twittered_at.nil?
+    logger.debug("utc: #{Time.current.utc}")
+    logger.debug("config.twitter_duration: #{Application.config.twitter_duration}")
+    return true if Time.current.utc - last_twittered_at > Application.config.twitter_duration
+    return false
   end
 
 end
