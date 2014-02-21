@@ -78,11 +78,11 @@ private
     while true do
       id = generate_id
       word = Word.find_by(id: id)
-      return word if canTwitter(word.last_twittered_at)
+      return word if can_twitter(word.last_twittered_at)
     end
   end
 
-  def canTwitter(last_twittered_at)
+  def can_twitter(last_twittered_at)
     logger.debug(last_twittered_at)
     return true if last_twittered_at.nil?
     logger.debug("utc: #{Time.current.utc}")
