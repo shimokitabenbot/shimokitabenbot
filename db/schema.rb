@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140216063552) do
+ActiveRecord::Schema.define(version: 20140220123716) do
 
   create_table "sentences", force: true do |t|
     t.string   "sentence",   limit: 76, null: false
@@ -21,12 +21,13 @@ ActiveRecord::Schema.define(version: 20140216063552) do
   end
 
   create_table "words", force: true do |t|
-    t.string   "word",        limit: 16, null: false
-    t.string   "description", limit: 32, null: false
-    t.string   "example",     limit: 64
-    t.string   "translate",   limit: 64
+    t.string   "word",              limit: 16, null: false
+    t.string   "description",       limit: 32, null: false
+    t.string   "example",           limit: 64
+    t.string   "translate",         limit: 64
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_twittered_at"
   end
 
 end
