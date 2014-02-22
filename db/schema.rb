@@ -14,8 +14,8 @@
 ActiveRecord::Schema.define(version: 20140220123716) do
 
   create_table "sentences", force: true do |t|
-    t.string   "sentence",   limit: 76, null: false
-    t.string   "hashtag",    limit: 76, null: false
+    t.string   "sentence",   limit: 72, null: false
+    t.string   "hashtag",    limit: 72, null: false
     t.datetime "last_twittered_at"
     t.datetime "created_at"
     t.datetime "updated_at"

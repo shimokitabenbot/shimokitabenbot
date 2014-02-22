@@ -21,13 +21,13 @@ describe Sentence do
 
     it 'sentence is exceeded' do
       s = Sentence.new
-      s.sentence = 'a' * 77
+      s.sentence = 'a' * 73
       expect(s).not_to be_valid
     end
 
     it 'hashtag is exceeded' do
       s = Sentence.new
-      s.hashtag = 'a' * 77
+      s.hashtag = 'a' * 73
       expect(s).not_to be_valid
     end
   end
