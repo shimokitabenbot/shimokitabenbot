@@ -4,6 +4,7 @@ one:
   description: 教える
   example: しかへで、エライ人。
   translate: 教えて、エライ人。
+  last_twittered_at: <%= Time.now.yesterday.to_s %>
 two:
   id: 2
   word: わらし
@@ -16,3 +17,4 @@ three:
   description: あなた
   example: おめどなあ。
   translate: おまえらなあ。
+  last_twittered_at: <%= (Time.now - 31 * 60).to_s %>

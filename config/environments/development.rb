@@ -31,4 +31,7 @@ Shimokitabenbot::Application.configure do
   config.logger = Logger.new(config.log_path)
   config.logger.formatter = Logger::Formatter.new
   config.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+
+  # twitter duration (seconds)
+  config.twitter_duration = 1200
 end
