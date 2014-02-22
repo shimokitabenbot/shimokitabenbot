@@ -42,7 +42,7 @@ describe SentenceController, :controller => 'sentences' do
   # リクエストボディに値が存在しない
   describe 'Value not found' do
     it 'word is empty' do
-      params = {"sentence"=>"", "hashtag" => "わたし"}
+      params = {"sentence"=>"a"}
       post 'create', params
       expect(response.status).to eq(400)
       res_body = JSON.parse(response.body)
@@ -50,7 +50,7 @@ describe SentenceController, :controller => 'sentences' do
       expect(err).not_to be_nil
       expect(err['code']).to eq('11000003')
       expect(err['message']).to eq('empty_value')
-      expect(err['detail']).to eq("Validation failed: Sentence can't be blank")
+      expect(err['detail']).to eq("Validation failed: Hashtag can't be blank")
     end
   end
 
@@ -79,7 +79,7 @@ describe SentenceController, :controller => 'sentences' do
       id = res_body['id']
       expect(id).not_to be_nil
       snt = res_body['sentence']
-      expect(word).to eq('わいだっきゃほいどでねぇ。')
+      expect(snt).to eq('わいだっきゃほいどでねぇ。')
     end
   end
 end
