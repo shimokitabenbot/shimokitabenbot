@@ -79,7 +79,7 @@ private
   end
 
   def can_twitter(last_twittered_at)
-    logger.debug(last_twittered_at)
+    logger.info("Previous Last Twittered At: #{last_twittered_at}")
     return true if last_twittered_at.nil?
     logger.debug("utc: #{Time.current.utc}")
     logger.debug("config.twitter_duration: #{Application.config.twitter_duration}")
