@@ -78,6 +78,6 @@ Shimokitabenbot::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # twitter duration (hour)
-  config.twitter_duration = 3 * 24
+  # twitter duration (seconds)
+  config.twitter_duration = ENV['TWITTER_DURATION'].to_i
 end
