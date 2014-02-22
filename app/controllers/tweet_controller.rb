@@ -18,9 +18,10 @@ class TweetController < ApplicationController
     # 単語を一つランダムに取得する
     tweet = nil
     retry_count = 1
+    max_id = Word.maximum(:id) # 呼び出しは1回だけ
     begin
       logger.info("単語検索")
-      word = find_word
+      word = find_word(max_id)
       tweet = word.tweet
       client = Application.config.client
       logger.debug("client: #{client.to_s}")
@@ -65,24 +66,19 @@ class TweetController < ApplicationController
   end
 
 private
-  def generate_id
-    max_id = Word.maximum(:id)
-    id = 0
-    10.times do
-      id = rand(max_id) + 1
-      return id
-    end
+  def generate_id(max_id)
+    return rand(max_id) + 1
   end
 
-  def find_word
-    while true do
-      id = generate_id
+  def find_word(max_id)
+    max_id.times do
+      id = generate_id(max_id)
       word = Word.find_by(id: id)
-      return word if canTwitter(word.last_twittered_at)
+      return word if can_twitter(word.last_twittered_at)
     end
   end
 
-  def canTwitter(last_twittered_at)
+  def can_twitter(last_twittered_at)
     logger.debug(last_twittered_at)
     return true if last_twittered_at.nil?
     logger.debug("utc: #{Time.current.utc}")
