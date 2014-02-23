@@ -18,11 +18,12 @@ class TweetController < ApplicationController
     # 単語を一つランダムに取得する
     tweet = nil
     retry_count = 1
-    max_id = Word.maximum(:id) # 呼び出しは1回だけ
+    word_max_id = Word.maximum(:id) # 呼び出しは1回だけ
+    snt_max_id = Sentence.maximum(:id)
     begin
       logger.info("単語検索")
-      word = find_word(max_id)
-      tweet = word.tweet
+      record = find_record(word_max_id, snt_max_id)
+      tweet = record.tweet
       client = Application.config.client
       logger.debug("client: #{client.to_s}")
       logger.info("ツイート")
@@ -30,8 +31,8 @@ class TweetController < ApplicationController
       res = client.update(tweet)
       logger.debug("result: #{res.to_s}")
       created_at = res['created_at']
-      word.last_twittered_at = created_at
-      word.save!
+      record.last_twittered_at = created_at
+      record.save!
       render :status => :created, :json => { "tweet" => tweet, "twittered_at" => created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }.to_json
     rescue NoMethodError => e
       logger.warn("Word is not found.")
@@ -70,11 +71,18 @@ private
     return rand(max_id) + 1
   end
 
-  def find_word(max_id)
+  def find_record(word_max_id, snt_max_id)
+    max_id = word_max_id + snt_max_id
     max_id.times do
       id = generate_id(max_id)
-      word = Word.find_by(id: id)
-      return word if can_twitter(word.last_twittered_at)
+      record = nil
+      if id > word_max_id
+        id = id - word_max_id
+        record = Sentence.find_by(id: id)
+      else
+        record = Word.find_by(id: id)
+      end
+      return record if can_twitter(record.last_twittered_at)
     end
   end
 
