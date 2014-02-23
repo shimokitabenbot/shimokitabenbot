@@ -10,7 +10,7 @@ require 'spec_helper'
 require 'base64'
 
 describe TweetController, :controller => 'tweet', :action => 'twitter' do
-  fixtures :word
+  fixtures :word, :sentence
   # リクエストパラメータ
   before(:each) do
     @request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64::encode64("name:password")
@@ -18,6 +18,7 @@ describe TweetController, :controller => 'tweet', :action => 'twitter' do
 
   after(:all) do
     Word.destroy_all
+    Sentence.destroy_all
   end
 
   describe 'Succeeded' do
