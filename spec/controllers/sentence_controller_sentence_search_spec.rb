@@ -13,7 +13,7 @@ require 'spec_helper'
 require 'base64'
 
 describe SentenceController, :controller => 'sentences' do
-  fixtures :sentences
+  fixtures :sentence
   before(:each) do
     # リクエストパラメータ設定
     @request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64::encode64("name:password")

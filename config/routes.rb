@@ -20,6 +20,7 @@ Shimokitabenbot::Application.routes.draw do
 
   # SentenceController
   post 'sentence' => 'sentence#create'
+  get 'sentence' => 'sentence#search'
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
