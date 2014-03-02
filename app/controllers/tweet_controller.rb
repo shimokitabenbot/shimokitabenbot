@@ -7,6 +7,7 @@ require 'twitter'
 require 'date'
 require 'bot_database_error'
 require 'twitter_failed_error'
+require 'empty_body_error'
 class TweetController < ApplicationController
   include Shimokitabenbot
 
@@ -64,6 +65,27 @@ class TweetController < ApplicationController
       logger.error(e)
       raise TwitterFailedError, tweet
     end
+  end
+
+  def twitter_free
+    raise EmptyBodyError if params[:tweet].nil? or params[:tweet].empty?
+
+    begin
+      client = Application.config.client
+      tweet = "#{params[:tweet]}\n#{params[:hashtag]}\n#下北弁"
+      logger.debug("内容:\n #{tweet}")
+      res = client.update(tweet)
+      logger.debug("result: #{res.to_s}")
+      created_at = res['created_at']
+      render :status => :created, :json => { "tweet" => tweet, "twittered_at" => created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }.to_json
+    rescue Twitter::Error::ServiceUnavailable => e
+      logger.error(e)
+      raise AccessUnabledError, e.message
+    rescue Twitter::Error=> e
+      logger.error(e)
+      raise TwitterFailedError, tweet
+    end
+
   end
 
 private
