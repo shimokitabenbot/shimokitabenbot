@@ -113,4 +113,16 @@ describe Word do
       expect(w).to be_invalid
     end
   end
+
+  describe 'twitter exceed' do
+    it 'over 140 chars' do
+      w = Word.new
+      w.word = 'a' * 16
+      w.description = 'a' * 32
+      w.example = 'a' * 64
+      w.translate = 'a' * 64
+      expect(w).not_to be_valid
+    end
+  end
+
 end
