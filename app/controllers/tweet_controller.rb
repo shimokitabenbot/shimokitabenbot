@@ -96,17 +96,17 @@ private
 
   def find_record(word_max_id, snt_max_id)
     max_id = word_max_id + snt_max_id
-    last_date = Time.current.utc.days_ago(Application.config.twitter_duration)
+    last_date = Time.current.utc.days_ago(Application.config.twitter_duration).strftime('%Y-%m-%d %H:%M:%S')
     max_id.times do
       record = nil
       if generate_id(max_id) > word_max_id
         # こっちはsentenceからIDだけ取得
-        id = Sentence.select("id").where("last_twittered_at is null or last_twittered_at < #{last_date}").sample
+        id = Sentence.select("id").where("last_twittered_at is null or last_twittered_at < '#{last_date}'").sample
         continue unless id
         record = Sentence.find_by(id: id)
       else
         # こっちはwordからIDだけ取得
-        id = Word.select("id").where("last_twittered_at is null or last_twittered_at < #{last_date}").sample
+        id = Word.select("id").where("last_twittered_at is null or last_twittered_at < '#{last_date}'").sample
         continue unless id
         record = Word.find_by(id: id)
       end
