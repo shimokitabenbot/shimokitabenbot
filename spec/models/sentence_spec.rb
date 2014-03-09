@@ -30,6 +30,22 @@ describe Sentence do
       s.hashtag = 'a' * 73
       expect(s).not_to be_valid
     end
+
+    it 'twitter chars exceeded' do
+      s = Sentence.new
+      s.sentence = 'a' * 70
+      s.hashtag = 'a' * 70
+      expect(s).not_to be_valid
+    end
+  end
+
+  describe 'Succeeded' do
+    it 'ok' do
+      s = Sentence.new
+      s.sentence = 'a' * 50
+      s.hashtag = '#' + ('a' * 50)
+      expect(s).to be_valid
+    end
   end
 
 end

@@ -13,6 +13,7 @@ class Word < ActiveRecord::Base
   validates :example, :length => { :maximum => 64 }
   validates :translate, :length => { :maximum => 64 }
   validate :validates_example_and_translate 
+  validate :validates_tweet
 
   def tweet
     return "[単語]: #{word}\n[意味]: #{description}\n[用例]: #{example}\n(#{translate})\n#下北弁"
@@ -25,5 +26,9 @@ private
     elsif translate.nil? or translate.empty?
       errors.add(:translate, "Translate can't be blank.") unless translate.nil? or example.empty?
     end
+  end
+
+  def validates_tweet
+    errors.add('tweet', "Tweet is valud exceeded.") if tweet.size > 140
   end
 end

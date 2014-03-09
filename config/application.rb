@@ -29,5 +29,7 @@ module Shimokitabenbot
       config.access_token_secret = ENV["ACCESS_SECRET"]
     end
 
+    config.max_chars = 140
+
   end
 end
