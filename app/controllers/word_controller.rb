@@ -13,33 +13,22 @@ class WordController < ApplicationController
   def create
     logger.info('Start word regist.')
     raise EmptyBodyError if params.nil? or !params.has_key?(:description)
-    # Wordsテーブルに登録する
-    id = 0
-    logger.debug("#{params[:word]}, #{params[:decription]}, #{params[:example]}, #{params[:translate]}")
-    record = nil
+    logger.debug("Request Parameters : #{params}")
     begin
       logger.info('Insert record started')
+      # Wordsテーブルに登録する
       record = Word.new do |w|
-        w.word = params[:word]
+        w.word        = params[:word]
         w.description = params[:description]
-        w.example = params[:example]
-        w.translate = params[:translate]
+        w.example     = params[:example]
+        w.translate   = params[:translate]
         w.save!
       end
       logger.info('Insert record finished.')
       render :status => :created, :json => { "id" => record.id, "word" => record.word}.to_json
       logger.info('Succeeded word regist.')
     rescue ActiveRecord::RecordInvalid => e
-      if e.message.include?("can't be blank")
-        logger.error(e)
-        raise EmptyValueError, e.message 
-      elsif e.message.include?("too long")
-        logger.error(e)
-        raise ValueExceededError, e.message
-      else
-        logger.error(e)
-        raise BotInternalError, e.message
-      end
+      raise_error_from_invalid_record(e)
     rescue => e
       logger.error(e)
       raise BotInternalError, e.message
@@ -55,14 +44,14 @@ class WordController < ApplicationController
     if params[:word] and !params[:word].empty?
       # 単語が指定されている場合、単語検索
       if params[:match_type].nil? or params[:match_type] == 'complete'
-        logger.info("完全一致")
+        logger.info("Exact Match.")
         words = Word.where(:word => params[:word])
       elsif params[:match_type] == 'part'
-        logger.info("部分一致")
+        logger.info("Partial Match.")
         words = Word.where(["word like ?", "%#{params[:word]}%"])
       end
     else
-      logger.info("全件検索")
+      logger.info("Exhaustive Search.")
       # 単語が指定されていない場合、全件検索
       words = Word.all 
     end
@@ -91,31 +80,26 @@ class WordController < ApplicationController
           # 更新レコードがない場合
           raise NotFound
         elsif word.ids.size > 1
+          # 検索件数が複数ある場合
           raise SomeWordsForUpdateError, word.to_json
-        else
-          word = Word.find(word.ids[0])
         end
       else
         logger.warn("No id and word.")
         raise NoIdAndWordError
       end
-      logger.debug("word = #{word.to_s}")    
+      logger.debug("word = #{word}")    
 
-      # 検索件数が複数ある場合
+      WordHst.new do |h|
+        h.word_id = word.id
+        h.example = params[:example]
+        h.translate = params[:translate]
+        h.save!
+      end
       word.update({:example => params[:example], :translate => params[:translate]})
       render :status => 200, :json => word.to_json
       logger.info("Succeeded word update.")
     rescue ActiveRecord::RecordInvalid => e
-      if e.message.include?("can't be blank")
-        logger.error(e)
-        raise EmptyValueError, e.message 
-      elsif e.message.include?("too long")
-        logger.error(e)
-        raise ValueExceededError, e.message
-      else
-        logger.error(e)
-        raise BotInternalError, e.message
-      end
+      raise_error_from_invalid_record(e)
     rescue BotError => e
       raise e
     rescue NotFound => e
@@ -125,4 +109,20 @@ class WordController < ApplicationController
       raise BotInternalError, e.message
     end
   end
+
+# Refactoring 
+private
+  # ActiveRecord::RecordInvalidからスローする例外を判断する
+  def raise_error_from_invalid_record(error)
+    if error.message.include?("can't be blank")
+      logger.error(error)
+      raise EmptyValueError, error.message 
+    elsif error.message.include?("too long")
+      logger.error(error)
+      raise ValueExceededError, error.message
+    else
+      logger.error(error)
+      raise BotInternalError, error.message
+    end
+  end  
 end
