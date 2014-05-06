@@ -102,12 +102,12 @@ private
       if generate_id(max_id) > word_max_id
         # こっちはsentenceからIDだけ取得
         id = Sentence.select("id").where("last_twittered_at is null or last_twittered_at < '#{last_date}'").sample
-        continue unless id
+        next unless id
         record = Sentence.find_by(id: id)
       else
         # こっちはwordからIDだけ取得
         id = Word.select("id").where("last_twittered_at is null or last_twittered_at < '#{last_date}'").sample
-        continue unless id
+        next unless id
         record = Word.find_by(id: id)
       end
       return record
